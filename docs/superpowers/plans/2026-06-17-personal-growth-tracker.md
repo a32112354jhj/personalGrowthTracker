@@ -224,7 +224,7 @@ test("todayISO 回傳 YYYY-MM-DD 格式", () => {
 
 - [ ] **Step 2: 跑測試確認失敗**
 
-Run: `node --test tests/`
+Run: `node --test`
 Expected: FAIL，訊息類似 `Cannot find module '../js/logic.js'`。
 
 - [ ] **Step 3: 實作 logic.js**
@@ -293,7 +293,7 @@ export function parseMetricValue(str) {
 
 - [ ] **Step 4: 跑測試確認通過**
 
-Run: `node --test tests/`
+Run: `node --test`
 Expected: PASS，6 個測試全綠。
 
 - [ ] **Step 5: Commit**
@@ -1176,7 +1176,7 @@ Expected: 上述全部通過。
 
 - [ ] **Step 3: 跑單元測試確認未退化**
 
-Run: `node --test tests/`
+Run: `node --test`
 Expected: PASS。
 
 - [ ] **Step 4: Commit**
