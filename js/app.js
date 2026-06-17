@@ -1,9 +1,11 @@
 import { currentUser, signIn, onAuthChange } from "./auth.js";
 import { renderToday } from "./ui-today.js";
 import { renderReview } from "./ui-review.js";
+import { renderCharts } from "./ui-charts.js";
 import { renderSettings } from "./ui-settings.js";
 
 const el = (id) => document.getElementById(id);
+const TABS = ["today", "review", "charts", "settings"];
 
 export function showToast(msg) {
   const t = el("toast");
@@ -15,11 +17,12 @@ export function showToast(msg) {
 const renderers = {
   today: () => renderToday(el("tab-today")),
   review: () => renderReview(el("tab-review")),
+  charts: () => renderCharts(el("tab-charts")),
   settings: () => renderSettings(el("tab-settings")),
 };
 
 function switchTab(name) {
-  for (const tab of ["today", "review", "settings"]) {
+  for (const tab of TABS) {
     el(`tab-${tab}`).classList.toggle("hidden", tab !== name);
   }
   document.querySelectorAll("#tabbar button").forEach((b) =>

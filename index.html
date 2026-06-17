@@ -6,9 +6,9 @@
   <title>成長檢核</title>
   <link rel="stylesheet" href="css/styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 </head>
 <body>
-  <!-- 登入畫面 -->
   <section id="login-view" class="view hidden">
     <h1>成長檢核</h1>
     <form id="login-form">
@@ -19,17 +19,17 @@
     </form>
   </section>
 
-  <!-- 主畫面 -->
   <main id="app-view" class="hidden">
     <section id="tab-today" class="tab"></section>
     <section id="tab-review" class="tab hidden"></section>
+    <section id="tab-charts" class="tab hidden"></section>
     <section id="tab-settings" class="tab hidden"></section>
   </main>
 
-  <!-- 底部分頁列 -->
   <nav id="tabbar" class="hidden">
     <button data-tab="today" class="active">今天</button>
     <button data-tab="review">回顧</button>
+    <button data-tab="charts">圖表</button>
     <button data-tab="settings">設定</button>
   </nav>
 

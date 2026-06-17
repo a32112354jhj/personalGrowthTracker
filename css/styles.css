@@ -54,3 +54,9 @@ button.link { background: none; color: var(--muted); padding: 4px; font-weight: 
   background: #042; color: var(--text); padding: 10px 18px; border-radius: 20px;
   border: 1px solid var(--accent);
 }
+.hm-wrap { display: flex; gap: 3px; overflow-x: auto; padding: 6px 0; }
+.hm-col { display: flex; flex-direction: column; gap: 3px; }
+.hm-cell { width: 13px; height: 13px; border-radius: 3px; background: #234b63; }
+.hm-cell.on { background: #1ca8c4; }
+.hm-cell.off { background: transparent; }
+.chart-units button { flex: 0 0 auto; padding: 8px 14px; }
