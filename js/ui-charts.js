@@ -144,16 +144,43 @@ async function draw(root) {
       data: { labels: ["達成", "未達成"], datasets: [{ data: [doneDays, notDoneDays], backgroundColor: ["#1496b0", "#d3dde4"] }] },
       options: { maintainAspectRatio: false, plugins: { legend: { labels: { color: "#1b2b36" } } } },
     }));
+
+    const tip = area.querySelector("#hm-tip");
+    area.querySelectorAll(".hm-cell[data-date]").forEach((cell) =>
+      cell.addEventListener("click", () => {
+        tip.textContent = `${cell.dataset.date}　${cell.dataset.done === "1" ? "已完成 ✓" : "未完成"}`;
+      })
+    );
   }
 }
 
+const WEEKDAYS = ["一", "二", "三", "四", "五", "六", "日"];
+
 function heatmapHtml(weeks) {
+  let prevMonth = null;
+  const monthCells = weeks
+    .map((week) => {
+      const ref = week.find((c) => c.inRange) || week[0];
+      const mo = Number(ref.date.slice(5, 7));
+      let label = "";
+      if (mo !== prevMonth) { label = mo + "月"; prevMonth = mo; }
+      return `<div class="hm-mlabel">${label}</div>`;
+    })
+    .join("");
+
+  const weekdayCol = WEEKDAYS.map((d) => `<div class="hm-wd">${d}</div>`).join("");
+
   const cols = weeks
     .map((week) => `<div class="hm-col">${week
-      .map((c) => `<div class="hm-cell ${c.done ? "on" : ""} ${c.inRange ? "" : "off"}" title="${c.date}"></div>`)
+      .map((c) => `<div class="hm-cell ${c.done ? "on" : ""} ${c.inRange ? "" : "off"}"${c.inRange ? ` data-date="${c.date}" data-done="${c.done ? 1 : 0}"` : ""}></div>`)
       .join("")}</div>`)
     .join("");
-  return `<div class="hm-wrap">${cols}</div>`;
+
+  return `<div class="hm-scroll"><div class="hm">
+      <div class="hm-monthrow"><div class="hm-left"></div><div class="hm-cols">${monthCells}</div></div>
+      <div class="hm-bodyrow"><div class="hm-wdcol">${weekdayCol}</div><div class="hm-cols">${cols}</div></div>
+    </div></div>
+    <p id="hm-tip" class="muted" style="margin-top:6px">點任一格看日期</p>`;
 }
 
 function axisOpts(intY) {
