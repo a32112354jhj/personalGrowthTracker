@@ -40,3 +40,96 @@ test("parseMetricValue：合法數字回傳 number，非法回傳 null", () => {
 test("todayISO 回傳 YYYY-MM-DD 格式", () => {
   assert.match(todayISO(), /^\d{4}-\d{2}-\d{2}$/);
 });
+
+import {
+  mondayOf,
+  bucketKey,
+  enumerateBuckets,
+  aggregateValues,
+  aggregateHabitCounts,
+  habitDoneCounts,
+  alignSeries,
+  bucketLabel,
+  calendarGrid,
+} from "../js/logic.js";
+
+test("mondayOf 回傳該週週一（週一為起點）", () => {
+  assert.equal(mondayOf("2026-06-17"), "2026-06-15");
+  assert.equal(mondayOf("2026-06-15"), "2026-06-15");
+  assert.equal(mondayOf("2026-06-21"), "2026-06-15");
+});
+
+test("bucketKey 依單位分組", () => {
+  assert.equal(bucketKey("2026-06-17", "week"), "2026-06-15");
+  assert.equal(bucketKey("2026-06-17", "month"), "2026-06");
+  assert.equal(bucketKey("2026-06-17", "quarter"), "2026-Q2");
+  assert.equal(bucketKey("2026-06-17", "year"), "2026");
+});
+
+test("enumerateBuckets 列出區間內所有分組（由舊到新）", () => {
+  assert.deepEqual(enumerateBuckets("2026-04-10", "2026-06-17", "month"),
+    ["2026-04", "2026-05", "2026-06"]);
+  assert.deepEqual(enumerateBuckets("2025-11-01", "2026-02-01", "quarter"),
+    ["2025-Q4", "2026-Q1"]);
+  assert.deepEqual(enumerateBuckets("2024-06-01", "2026-06-01", "year"),
+    ["2024", "2025", "2026"]);
+  assert.deepEqual(enumerateBuckets("2026-06-15", "2026-06-29", "week"),
+    ["2026-06-15", "2026-06-22", "2026-06-29"]);
+});
+
+test("aggregateValues sum 與 avg", () => {
+  const rows = [
+    { log_date: "2026-06-01", value: 100 },
+    { log_date: "2026-06-20", value: 50 },
+    { log_date: "2026-05-10", value: 8 },
+  ];
+  assert.deepEqual(aggregateValues(rows, "month", "sum"), { "2026-06": 150, "2026-05": 8 });
+  assert.deepEqual(aggregateValues(rows, "month", "avg"), { "2026-06": 75, "2026-05": 8 });
+});
+
+test("aggregateHabitCounts 只計 done=true 的數量", () => {
+  const checks = [
+    { log_date: "2026-06-01", done: true },
+    { log_date: "2026-06-02", done: false },
+    { log_date: "2026-06-20", done: true },
+  ];
+  assert.deepEqual(aggregateHabitCounts(checks, "month"), { "2026-06": 2 });
+});
+
+test("habitDoneCounts 統計完成與未完成", () => {
+  const checks = [{ done: true }, { done: true }, { done: false }];
+  assert.deepEqual(habitDoneCounts(checks), { done: 2, notDone: 1 });
+});
+
+test("alignSeries 對齊 buckets，缺漏補 null 或 0", () => {
+  assert.deepEqual(alignSeries(["a", "b", "c"], { a: 1, c: 3 }, false), [1, null, 3]);
+  assert.deepEqual(alignSeries(["a", "b"], { a: 1 }, true), [1, 0]);
+});
+
+test("bucketLabel：週顯示 MM/DD，其餘顯示鍵本身", () => {
+  assert.equal(bucketLabel("2026-06-15", "week"), "06/15");
+  assert.equal(bucketLabel("2026-06", "month"), "2026-06");
+  assert.equal(bucketLabel("2026-Q2", "quarter"), "2026-Q2");
+});
+
+test("calendarGrid 產生週欄（週一起），有打勾的日子標記 done", () => {
+  const done = new Set(["2026-06-15", "2026-06-18"]);
+  const weeks = calendarGrid("2026-06-15", "2026-06-21", done);
+  assert.equal(weeks.length, 1);
+  assert.equal(weeks[0].length, 7);
+  assert.equal(weeks[0][0].date, "2026-06-15");
+  assert.equal(weeks[0][0].done, true);
+  assert.equal(weeks[0][3].date, "2026-06-18");
+  assert.equal(weeks[0][3].done, true);
+  assert.equal(weeks[0][1].done, false);
+  assert.equal(weeks[0][6].date, "2026-06-21");
+});
+
+test("calendarGrid 區間外的補白格 inRange=false", () => {
+  const weeks = calendarGrid("2026-06-17", "2026-06-17", new Set(["2026-06-17"]));
+  const cells = weeks.flat();
+  const target = cells.find((c) => c.date === "2026-06-17");
+  assert.equal(target.inRange, true);
+  assert.equal(target.done, true);
+  assert.equal(cells.find((c) => c.date === "2026-06-15").inRange, false);
+});
