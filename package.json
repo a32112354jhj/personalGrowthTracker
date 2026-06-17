@@ -1,0 +1,10 @@
+{
+  "name": "personal-growth-tracker",
+  "version": "1.0.0",
+  "description": "單人自我成長檢核系統（純前端 + Supabase）",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/"
+  }
+}
