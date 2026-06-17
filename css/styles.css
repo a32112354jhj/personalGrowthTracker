@@ -1,10 +1,13 @@
 :root {
-  --bg: #0f2233;
-  --card: #16314a;
-  --accent: #1ca8c4;
-  --text: #eaf2f6;
-  --muted: #8fb0c0;
-  --danger: #e2606a;
+  --bg: #eef2f7;
+  --card: #ffffff;
+  --surface-2: #e6edf3;
+  --accent: #1496b0;
+  --on-accent: #ffffff;
+  --text: #1b2b36;
+  --muted: #5c7384;
+  --danger: #d2495a;
+  --border: #d8e0e8;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -23,26 +26,34 @@ input, textarea, button, select {
 }
 input, textarea, select {
   width: 100%; padding: 12px; margin: 6px 0;
-  background: var(--card); border: 1px solid #234; border-radius: 10px;
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(20, 150, 176, 0.15);
 }
 button {
   background: var(--accent); border: none; border-radius: 10px;
-  padding: 12px 16px; color: #042; font-weight: 600; cursor: pointer;
+  padding: 12px 16px; color: var(--on-accent); font-weight: 600; cursor: pointer;
 }
 button.secondary { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
 button.link { background: none; color: var(--muted); padding: 4px; font-weight: 400; }
 .error { color: var(--danger); margin-top: 8px; min-height: 1.2em; }
-.card { background: var(--card); border-radius: 12px; padding: 14px; margin: 10px 0; }
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px; margin: 10px 0;
+}
 .row { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
 .check { width: 30px; height: 30px; border-radius: 8px; border: 2px solid var(--accent); background: transparent; }
 .check.done { background: var(--accent); }
+input[type=range] { accent-color: var(--accent); }
 .slider-row input[type=range] { flex: 1; }
 .muted { color: var(--muted); font-size: 0.9rem; }
-.bar { height: 8px; background: #234; border-radius: 4px; overflow: hidden; }
+.bar { height: 8px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
 .bar > span { display: block; height: 100%; background: var(--accent); }
 #tabbar {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  display: flex; background: var(--card); border-top: 1px solid #234;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+  display: flex; background: var(--card); border-top: 1px solid var(--border);
   padding-bottom: env(safe-area-inset-bottom);
 }
 #tabbar button {
@@ -50,13 +61,35 @@ button.link { background: none; color: var(--muted); padding: 4px; font-weight: 
 }
 #tabbar button.active { color: var(--accent); font-weight: 600; }
 .toast {
-  position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%);
-  background: #042; color: var(--text); padding: 10px 18px; border-radius: 20px;
-  border: 1px solid var(--accent);
+  position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%); z-index: 20;
+  background: var(--accent); color: var(--on-accent); padding: 10px 18px; border-radius: 20px;
+  box-shadow: 0 4px 14px rgba(27, 43, 54, 0.18);
 }
 .hm-wrap { display: flex; gap: 3px; overflow-x: auto; padding: 6px 0; }
 .hm-col { display: flex; flex-direction: column; gap: 3px; }
-.hm-cell { width: 13px; height: 13px; border-radius: 3px; background: #234b63; }
-.hm-cell.on { background: #1ca8c4; }
+.hm-cell { width: 13px; height: 13px; border-radius: 3px; background: var(--surface-2); }
+.hm-cell.on { background: var(--accent); }
 .hm-cell.off { background: transparent; }
 .chart-units button { flex: 0 0 auto; padding: 8px 14px; }
+
+/* ===== 桌機 / 平板 RWD ===== */
+@media (min-width: 768px) {
+  body { padding-bottom: 0; padding-top: 64px; }
+  .view, .tab { max-width: 820px; padding: 32px 28px 56px; }
+  h1 { font-size: 1.8rem; }
+  #tabbar {
+    position: fixed; top: 0; bottom: auto; left: 0; right: 0;
+    justify-content: center; gap: 8px;
+    border-top: none; border-bottom: 1px solid var(--border);
+    padding: 8px 0; box-shadow: 0 1px 6px rgba(27, 43, 54, 0.06);
+  }
+  #tabbar button {
+    flex: 0 0 auto; min-width: 132px; border-radius: 8px; padding: 12px 16px;
+  }
+  #tabbar button.active { background: rgba(20, 150, 176, 0.1); }
+  .toast { bottom: auto; top: 76px; }
+}
+
+@media (min-width: 1024px) {
+  .view, .tab { max-width: 920px; }
+}
