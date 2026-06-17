@@ -196,3 +196,27 @@ export function defaultFrom(endISO, unit) {
   if (unit === "year") return isoFromDate(new Date(y - 4, 0, 1));
   return endISO;
 }
+
+// 區間內的日曆總天數（含起迄）。
+export function daysInRange(fromISO, toISO) {
+  const [fy, fm, fd] = fromISO.split("-").map(Number);
+  const [ty, tm, td] = toISO.split("-").map(Number);
+  const a = new Date(fy, fm - 1, fd);
+  const b = new Date(ty, tm - 1, td);
+  return Math.floor((b - a) / 86400000) + 1;
+}
+
+// 每個分組桶在區間內涵蓋的日曆天數。回傳 { 鍵: 天數 }。
+export function countDaysPerBucket(fromISO, toISO, unit) {
+  const out = {};
+  const [fy, fm, fd] = fromISO.split("-").map(Number);
+  const cursor = new Date(fy, fm - 1, fd);
+  while (true) {
+    const iso = isoFromDate(cursor);
+    if (iso > toISO) break;
+    const k = bucketKey(iso, unit);
+    out[k] = (out[k] || 0) + 1;
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return out;
+}

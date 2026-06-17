@@ -133,3 +133,17 @@ test("calendarGrid 區間外的補白格 inRange=false", () => {
   assert.equal(target.done, true);
   assert.equal(cells.find((c) => c.date === "2026-06-15").inRange, false);
 });
+
+import { daysInRange, countDaysPerBucket } from "../js/logic.js";
+
+test("daysInRange 計算含起迄的天數", () => {
+  assert.equal(daysInRange("2026-06-15", "2026-06-21"), 7);
+  assert.equal(daysInRange("2026-06-17", "2026-06-17"), 1);
+  assert.equal(daysInRange("2026-05-19", "2026-06-17"), 30);
+});
+
+test("countDaysPerBucket 計算每桶在區間內的日曆天數", () => {
+  assert.deepEqual(countDaysPerBucket("2026-06-15", "2026-06-21", "week"), { "2026-06-15": 7 });
+  assert.deepEqual(countDaysPerBucket("2026-05-30", "2026-06-02", "month"), { "2026-05": 2, "2026-06": 2 });
+  assert.deepEqual(countDaysPerBucket("2026-06-15", "2026-06-17", "week"), { "2026-06-15": 3 });
+});

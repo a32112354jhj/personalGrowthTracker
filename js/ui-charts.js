@@ -1,8 +1,8 @@
 import { listDefinitions, getRange } from "./db.js";
 import {
   todayISO, defaultFrom, enumerateBuckets, bucketLabel,
-  aggregateValues, aggregateHabitCounts, habitDoneCounts,
-  alignSeries, calendarGrid,
+  aggregateValues, aggregateHabitCounts,
+  alignSeries, calendarGrid, countDaysPerBucket, daysInRange,
 } from "./logic.js";
 
 const TABLES = { habit: "habit_checks", score: "scores", metric: "metric_values" };
@@ -115,26 +115,33 @@ async function draw(root) {
       options: axisOpts(false),
     }));
   } else {
-    const barData = alignSeries(buckets, aggregateHabitCounts(rows, state.unit), true);
-    const { done, notDone } = habitDoneCounts(rows);
+    // 完成率 = 該期完成天數 ÷ 該期涵蓋的日曆天數（週=7、月=當月天數…）。
+    const doneCounts = aggregateHabitCounts(rows, state.unit);
+    const dayCounts = countDaysPerBucket(state.from, state.to, state.unit);
+    const rateData = buckets.map((k) =>
+      dayCounts[k] ? Math.round(((doneCounts[k] || 0) / dayCounts[k]) * 100) : 0
+    );
+    const totalDays = daysInRange(state.from, state.to);
+    const doneDays = rows.filter((r) => r.done).length;
+    const notDoneDays = Math.max(0, totalDays - doneDays);
     const doneSet = new Set(rows.filter((r) => r.done).map((r) => r.log_date));
     const weeks = calendarGrid(state.from, state.to, doneSet);
 
-    area.innerHTML = `<p class="muted">${escapeHtml(def.name)} · 每${unitName(state.unit)}完成次數</p>
+    area.innerHTML = `<p class="muted">${escapeHtml(def.name)} · 每${unitName(state.unit)}完成率（%）</p>
       <div style="position:relative;height:240px"><canvas id="c-bar"></canvas></div>
-      <p class="muted" style="margin-top:16px">完成 vs 未完成（區間內有記錄的日子）</p>
+      <p class="muted" style="margin-top:16px">達成 vs 未達成（區間內共 ${totalDays} 天）</p>
       <div style="position:relative;height:220px"><canvas id="c-pie"></canvas></div>
       <p class="muted" style="margin-top:16px">月曆檢視（有打勾就亮起）</p>
       ${heatmapHtml(weeks)}`;
 
     chartInstances.push(new Chart(area.querySelector("#c-bar"), {
       type: "bar",
-      data: { labels, datasets: [{ label: "完成次數", data: barData, backgroundColor: "#1ca8c4" }] },
-      options: axisOpts(true),
+      data: { labels, datasets: [{ label: "完成率 %", data: rateData, backgroundColor: "#1ca8c4" }] },
+      options: pctAxisOpts(),
     }));
     chartInstances.push(new Chart(area.querySelector("#c-pie"), {
       type: "doughnut",
-      data: { labels: ["完成", "未完成"], datasets: [{ data: [done, notDone], backgroundColor: ["#1ca8c4", "#234b63"] }] },
+      data: { labels: ["達成", "未達成"], datasets: [{ data: [doneDays, notDoneDays], backgroundColor: ["#1ca8c4", "#234b63"] }] },
       options: { maintainAspectRatio: false, plugins: { legend: { labels: { color: "#eaf2f6" } } } },
     }));
   }
@@ -156,6 +163,18 @@ function axisOpts(intY) {
     scales: {
       x: { ticks: { color: "#8fb0c0", maxRotation: 0, autoSkip: true }, grid: { color: grid } },
       y: { beginAtZero: intY, ticks: { color: "#8fb0c0", precision: intY ? 0 : undefined }, grid: { color: grid } },
+    },
+    plugins: { legend: { display: false } },
+  };
+}
+
+function pctAxisOpts() {
+  const grid = "rgba(143,176,192,.15)";
+  return {
+    maintainAspectRatio: false,
+    scales: {
+      x: { ticks: { color: "#8fb0c0", maxRotation: 0, autoSkip: true }, grid: { color: grid } },
+      y: { min: 0, max: 100, ticks: { color: "#8fb0c0", stepSize: 25, callback: (v) => v + "%" }, grid: { color: grid } },
     },
     plugins: { legend: { display: false } },
   };

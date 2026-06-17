@@ -1,5 +1,5 @@
 import { listDefinitions, getRange } from "./db.js";
-import { recentDates, completionRate, cumulativeSum, todayISO } from "./logic.js";
+import { recentDates, cumulativeSum, todayISO } from "./logic.js";
 
 const WINDOW = 30;
 
@@ -34,10 +34,10 @@ function habitSection(habits, checks) {
   if (!habits.length) return "";
   const rows = habits
     .map((h) => {
-      const mine = checks.filter((c) => c.habit_id === h.id);
-      const rate = completionRate(mine);
+      const doneDays = checks.filter((c) => c.habit_id === h.id && c.done).length;
+      const rate = Math.min(100, Math.round((doneDays / WINDOW) * 100));
       return `<div class="card">
-        <div class="row"><span>${escapeHtml(h.name)}</span><span class="muted">${rate}%</span></div>
+        <div class="row"><span>${escapeHtml(h.name)}</span><span class="muted">${doneDays}/${WINDOW} 天 · ${rate}%</span></div>
         <div class="bar"><span style="width:${rate}%"></span></div>
       </div>`;
     })
