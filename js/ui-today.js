@@ -31,18 +31,31 @@ export async function renderToday(root) {
     body.classList.remove("muted");
     body.innerHTML = `
       ${section("習慣", habits.map((h) => habitRow(h, checkMap[h.id] || false)).join("") || empty())}
-      ${section("評分（1–10）", scoreItems.map((s) => scoreRow(s, scoreMap[s.id] || 5)).join("") || empty())}
-      ${section("數值", metricItems.map((m) => metricRow(m, metricMap[m.id])).join("") || empty())}
+      ${section("評分（1–10）", scoreItems.map((s) => scoreRow(s, scoreMap[s.id] ?? 5, s.id in scoreMap)).join("") || empty())}
+      ${section("數值", metricItems.map((m) => metricRow(m, metricMap[m.id], m.id in metricMap)).join("") || empty())}
       <h2>日記</h2>
-      <textarea id="journal" rows="5" placeholder="今天的紀錄…">${escapeHtml(day.journal)}</textarea>
+      <textarea id="journal" rows="5" placeholder="今天的紀錄…" class="${day.journal ? "filled" : ""}">${escapeHtml(day.journal)}</textarea>
       <button id="save-btn">儲存</button>`;
 
+    // 已編輯的項目淡化（done / 已填值 / 有日記），讓未編輯的更明顯
     body.querySelectorAll(".check").forEach((btn) =>
       btn.addEventListener("click", () => {
-        btn.classList.toggle("done");
+        const on = btn.classList.toggle("done");
         const row = btn.closest(".habit-row");
-        if (row) row.classList.toggle("done", btn.classList.contains("done"));
+        if (row) { row.classList.toggle("done", on); row.classList.toggle("filled", on); }
       })
+    );
+    body.querySelectorAll("input[data-score]").forEach((inp) =>
+      inp.addEventListener("input", () => inp.closest(".card").classList.add("filled"))
+    );
+    body.querySelectorAll("input[data-metric]").forEach((inp) =>
+      inp.addEventListener("input", () =>
+        inp.closest(".card").classList.toggle("filled", inp.value.trim() !== "")
+      )
+    );
+    const journalEl = body.querySelector("#journal");
+    journalEl.addEventListener("input", () =>
+      journalEl.classList.toggle("filled", journalEl.value.trim() !== "")
     );
 
     body.querySelector("#save-btn").addEventListener("click", () =>
@@ -88,7 +101,7 @@ function empty() {
   return `<p class="muted">尚未在「設定」新增項目</p>`;
 }
 function habitRow(h, done) {
-  return `<div class="card row habit-row${done ? " done" : ""}">
+  return `<div class="card row habit-row${done ? " done filled" : ""}">
     <span class="hb-name">${escapeHtml(h.name)}</span>
     <span class="hb-right">
       <span class="hb-tag"></span>
@@ -96,8 +109,8 @@ function habitRow(h, done) {
     </span>
   </div>`;
 }
-function scoreRow(s, value) {
-  return `<div class="card">
+function scoreRow(s, value, edited) {
+  return `<div class="card${edited ? " filled" : ""}">
     <div class="row"><span>${escapeHtml(s.name)}</span><span class="muted" data-score-val="${s.id}">${value}</span></div>
     <div class="slider-row row">
       <input type="range" min="1" max="10" value="${value}" data-score="${s.id}"
@@ -105,8 +118,8 @@ function scoreRow(s, value) {
     </div>
   </div>`;
 }
-function metricRow(m, value) {
-  return `<div class="card row">
+function metricRow(m, value, edited) {
+  return `<div class="card row${edited ? " filled" : ""}">
     <span>${escapeHtml(m.name)}</span>
     <span class="row" style="flex:0 0 auto;width:auto;gap:6px">
       <input type="number" step="any" style="width:110px" data-metric="${m.id}"

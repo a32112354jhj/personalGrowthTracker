@@ -110,6 +110,12 @@ button.link { background: none; color: var(--muted); padding: 4px; font-weight: 
 .habit-row.done .hb-tag::after { content: "完成"; color: var(--good); text-shadow: 0 0 8px rgba(57, 255, 158, 0.6); }
 .habit-row.done .check.done { background: var(--good); box-shadow: 0 0 12px rgba(57, 255, 158, 0.85); }
 .habit-row.done .check.done::after { color: #04301c; }
+
+/* 已編輯 → 淡化；未編輯 → 明亮 + 亮邊，讓待辦更明顯 */
+.filled { opacity: 0.4; transition: opacity 0.15s ease; }
+.filled.habit-row, .filled .check.done { box-shadow: none; }
+#today-body .card:not(.filled) { border-left: 3px solid var(--accent); }
+#today-body textarea:not(.filled) { border-left: 3px solid var(--accent); }
 input[type=range] { accent-color: var(--accent); }
 .slider-row input[type=range] { flex: 1; }
 .muted { color: var(--muted); font-size: 0.92rem; letter-spacing: 0.5px; }
