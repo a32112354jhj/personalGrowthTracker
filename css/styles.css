@@ -98,7 +98,8 @@ button.link { background: none; color: var(--muted); padding: 4px; font-weight: 
 .check.done::after { content: "✓"; color: #04222e; opacity: 1; }
 
 /* 任務：未完成（待辦）vs 完成（達成）的區隔 */
-.habit-row { border-left: 3px solid var(--accent-dim); transition: all 0.15s ease; }
+.habit-row { border-left: 3px solid var(--accent-dim); transition: all 0.15s ease; cursor: pointer; user-select: none; -webkit-user-select: none; }
+.habit-row .check { pointer-events: none; }
 .hb-right { display: flex; align-items: center; gap: 12px; flex: 0 0 auto; width: auto; }
 .hb-tag::after { content: "待辦"; color: var(--muted); font-size: 0.8rem; letter-spacing: 1px; }
 .habit-row.done {

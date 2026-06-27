@@ -38,11 +38,13 @@ export async function renderToday(root) {
       <button id="save-btn">儲存</button>`;
 
     // 已編輯的項目淡化（done / 已填值 / 有日記），讓未編輯的更明顯
-    body.querySelectorAll(".check").forEach((btn) =>
-      btn.addEventListener("click", () => {
-        const on = btn.classList.toggle("done");
-        const row = btn.closest(".habit-row");
-        if (row) { row.classList.toggle("done", on); row.classList.toggle("filled", on); }
+    // 點整列任一處即可切換完成
+    body.querySelectorAll(".habit-row").forEach((row) =>
+      row.addEventListener("click", () => {
+        const chk = row.querySelector(".check");
+        const on = chk.classList.toggle("done");
+        row.classList.toggle("done", on);
+        row.classList.toggle("filled", on);
       })
     );
     body.querySelectorAll("input[data-score]").forEach((inp) =>
