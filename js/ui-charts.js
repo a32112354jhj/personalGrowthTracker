@@ -17,11 +17,17 @@ function unitName(u) { return ({ week: "週", month: "月", quarter: "季", year
 
 export async function renderCharts(root) {
   root.innerHTML = `<h1>圖表</h1>
-    <select id="chart-item"></select>
-    <div class="row chart-units" id="chart-units" style="gap:6px;justify-content:flex-start;flex-wrap:wrap"></div>
-    <div class="row" style="gap:6px;justify-content:flex-start;flex-wrap:wrap">
-      <label class="muted">起</label><input type="date" id="chart-from" style="width:auto;flex:1" />
-      <label class="muted">迄</label><input type="date" id="chart-to" style="width:auto;flex:1" />
+    <div class="chart-controls">
+      <span class="ctl-label">項目</span>
+      <select id="chart-item"></select>
+      <span class="ctl-label">單位</span>
+      <div class="chart-units" id="chart-units"></div>
+      <span class="ctl-label">查詢區間</span>
+      <div class="date-range">
+        <input type="date" id="chart-from" />
+        <span class="muted">~</span>
+        <input type="date" id="chart-to" />
+      </div>
     </div>
     <div id="chart-area" class="muted">載入中…</div>`;
 

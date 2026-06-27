@@ -133,7 +133,16 @@ input[type=range] { accent-color: var(--accent); }
 .hm-cell { width: 14px; height: 14px; background: rgba(43, 212, 255, 0.12); cursor: pointer; }
 .hm-cell.on { background: var(--accent); box-shadow: 0 0 8px rgba(43, 212, 255, 0.85); }
 .hm-cell.off { background: transparent; cursor: default; }
-.chart-units button { flex: 0 0 auto; padding: 8px 14px; }
+.chart-controls { display: flex; flex-direction: column; margin-bottom: 28px; }
+.ctl-label { color: var(--muted); letter-spacing: 2px; font-size: 0.82rem; margin: 16px 0 4px; }
+.ctl-label:first-child { margin-top: 4px; }
+.chart-units { display: flex; gap: 8px; flex-wrap: wrap; }
+.chart-units button { flex: 0 0 auto; padding: 8px 18px; }
+.date-range { display: flex; align-items: center; gap: 10px; }
+.date-range input { flex: 1; min-width: 0; margin: 0; }
+#chart-area > p { margin-top: 26px; }
+#chart-area > p:first-child { margin-top: 8px; }
+#chart-area canvas { margin-top: 6px; }
 
 /* ===== 桌機 / 平板 RWD ===== */
 @media (min-width: 768px) {
