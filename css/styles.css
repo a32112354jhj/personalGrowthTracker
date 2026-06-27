@@ -96,6 +96,20 @@ button.link { background: none; color: var(--muted); padding: 4px; font-weight: 
 }
 .check.done { background: var(--accent); box-shadow: 0 0 12px rgba(43, 212, 255, 0.85); }
 .check.done::after { content: "✓"; color: #04222e; opacity: 1; }
+
+/* 任務：未完成（待辦）vs 完成（達成）的區隔 */
+.habit-row { border-left: 3px solid var(--accent-dim); transition: all 0.15s ease; }
+.hb-right { display: flex; align-items: center; gap: 12px; flex: 0 0 auto; width: auto; }
+.hb-tag::after { content: "待辦"; color: var(--muted); font-size: 0.8rem; letter-spacing: 1px; }
+.habit-row.done {
+  border-color: var(--good); border-left-color: var(--good);
+  background: rgba(57, 255, 158, 0.07);
+  box-shadow: 0 0 12px rgba(57, 255, 158, 0.22), inset 0 0 16px rgba(57, 255, 158, 0.05);
+}
+.habit-row.done .hb-name { color: var(--good); text-shadow: 0 0 8px rgba(57, 255, 158, 0.4); }
+.habit-row.done .hb-tag::after { content: "完成"; color: var(--good); text-shadow: 0 0 8px rgba(57, 255, 158, 0.6); }
+.habit-row.done .check.done { background: var(--good); box-shadow: 0 0 12px rgba(57, 255, 158, 0.85); }
+.habit-row.done .check.done::after { color: #04301c; }
 input[type=range] { accent-color: var(--accent); }
 .slider-row input[type=range] { flex: 1; }
 .muted { color: var(--muted); font-size: 0.92rem; letter-spacing: 0.5px; }

@@ -38,7 +38,11 @@ export async function renderToday(root) {
       <button id="save-btn">儲存</button>`;
 
     body.querySelectorAll(".check").forEach((btn) =>
-      btn.addEventListener("click", () => btn.classList.toggle("done"))
+      btn.addEventListener("click", () => {
+        btn.classList.toggle("done");
+        const row = btn.closest(".habit-row");
+        if (row) row.classList.toggle("done", btn.classList.contains("done"));
+      })
     );
 
     body.querySelector("#save-btn").addEventListener("click", () =>
@@ -84,9 +88,12 @@ function empty() {
   return `<p class="muted">尚未在「設定」新增項目</p>`;
 }
 function habitRow(h, done) {
-  return `<div class="card row">
-    <span>${escapeHtml(h.name)}</span>
-    <button class="check ${done ? "done" : ""}" data-id="${h.id}" aria-label="完成"></button>
+  return `<div class="card row habit-row${done ? " done" : ""}">
+    <span class="hb-name">${escapeHtml(h.name)}</span>
+    <span class="hb-right">
+      <span class="hb-tag"></span>
+      <button class="check ${done ? "done" : ""}" data-id="${h.id}" aria-label="完成"></button>
+    </span>
   </div>`;
 }
 function scoreRow(s, value) {
