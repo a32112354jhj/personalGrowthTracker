@@ -115,3 +115,56 @@ export async function getRange(table, fromDate, toDate) {
   if (error) throw error;
   return data;
 }
+
+// ===== 每週目標 / 復盤 =====
+
+export async function listWeeklyGoals(weekStart) {
+  const { data, error } = await sb
+    .from("weekly_goals")
+    .select("*")
+    .eq("week_start", weekStart)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
+export async function addWeeklyGoal(fields) {
+  const user_id = await uid();
+  const { data, error } = await sb
+    .from("weekly_goals")
+    .insert({ ...fields, user_id })
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export async function updateWeeklyGoal(id, fields) {
+  const { error } = await sb.from("weekly_goals").update(fields).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteWeeklyGoal(id) {
+  const { error } = await sb.from("weekly_goals").delete().eq("id", id);
+  if (error) throw error;
+}
+
+export async function getWeeklyReview(weekStart) {
+  const { data, error } = await sb
+    .from("weekly_reviews")
+    .select("reflection")
+    .eq("week_start", weekStart)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? data.reflection : "";
+}
+
+export async function saveWeeklyReview(weekStart, reflection) {
+  const user_id = await uid();
+  const { error } = await sb.from("weekly_reviews").upsert(
+    { user_id, week_start: weekStart, reflection, updated_at: new Date().toISOString() },
+    { onConflict: "user_id,week_start" }
+  );
+  if (error) throw error;
+}
