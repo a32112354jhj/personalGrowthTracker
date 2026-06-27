@@ -135,7 +135,8 @@ input[type=range] { accent-color: var(--accent); }
 }
 #tabbar button {
   flex: 1; background: none; color: var(--muted); font-family: "Rajdhani", sans-serif;
-  font-weight: 600; letter-spacing: 2px; filter: none; clip-path: none;
+  font-weight: 600; letter-spacing: 0.5px; font-size: 0.92rem; white-space: nowrap;
+  padding-left: 4px; padding-right: 4px; filter: none; clip-path: none;
 }
 #tabbar button.active { color: var(--accent); text-shadow: 0 0 10px rgba(43, 212, 255, 0.9); }
 .toast {
