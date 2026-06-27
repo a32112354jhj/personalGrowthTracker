@@ -31,7 +31,7 @@ export async function renderToday(root) {
     body.classList.remove("muted");
     body.innerHTML = `
       ${section("習慣", habits.map((h) => habitRow(h, checkMap[h.id] || false)).join("") || empty())}
-      ${section("評分（1–10）", scoreItems.map((s) => scoreRow(s, scoreMap[s.id] ?? 5, s.id in scoreMap)).join("") || empty())}
+      ${section("評分（1–10）", scoreItems.map((s) => scoreRow(s, scoreMap[s.id] ?? 5)).join("") || empty())}
       ${section("數值", metricItems.map((m) => metricRow(m, metricMap[m.id], m.id in metricMap)).join("") || empty())}
       <h2>日記</h2>
       <textarea id="journal" rows="5" placeholder="今天的紀錄…" class="${day.journal ? "filled" : ""}">${escapeHtml(day.journal)}</textarea>
@@ -46,9 +46,6 @@ export async function renderToday(root) {
         row.classList.toggle("done", on);
         row.classList.toggle("filled", on);
       })
-    );
-    body.querySelectorAll("input[data-score]").forEach((inp) =>
-      inp.addEventListener("input", () => inp.closest(".card").classList.add("filled"))
     );
     body.querySelectorAll("input[data-metric]").forEach((inp) =>
       inp.addEventListener("input", () =>
@@ -111,8 +108,8 @@ function habitRow(h, done) {
     </span>
   </div>`;
 }
-function scoreRow(s, value, edited) {
-  return `<div class="card${edited ? " filled" : ""}">
+function scoreRow(s, value) {
+  return `<div class="card">
     <div class="row"><span>${escapeHtml(s.name)}</span><span class="muted" data-score-val="${s.id}">${value}</span></div>
     <div class="slider-row row">
       <input type="range" min="1" max="10" value="${value}" data-score="${s.id}"
@@ -121,7 +118,7 @@ function scoreRow(s, value, edited) {
   </div>`;
 }
 function metricRow(m, value, edited) {
-  return `<div class="card row${edited ? " filled" : ""}">
+  return `<div class="card row metric-row${edited ? " filled" : ""}">
     <span>${escapeHtml(m.name)}</span>
     <span class="row" style="flex:0 0 auto;width:auto;gap:6px">
       <input type="number" step="any" style="width:110px" data-metric="${m.id}"

@@ -32,6 +32,9 @@ body::before {
 #app-view, #login-view, #tabbar, .toast { position: relative; z-index: 2; }
 .hidden { display: none !important; }
 .view, .tab { padding: 22px 16px; max-width: 640px; margin: 0 auto; }
+.tab { animation: tab-in 0.26s ease both; }
+@keyframes tab-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .tab { animation: none; } }
 
 h1 {
   font-family: "Orbitron", sans-serif; font-weight: 700;
@@ -115,7 +118,8 @@ button.link { background: none; color: var(--muted); padding: 4px; font-weight: 
 /* 已編輯 → 淡化；未編輯 → 明亮 + 亮邊，讓待辦更明顯 */
 .filled { opacity: 0.4; transition: opacity 0.15s ease; }
 .filled.habit-row, .filled .check.done { box-shadow: none; }
-#today-body .card:not(.filled) { border-left: 3px solid var(--accent); }
+.habit-row:not(.filled),
+#today-body .metric-row:not(.filled),
 #today-body textarea:not(.filled) { border-left: 3px solid var(--accent); }
 input[type=range] { accent-color: var(--accent); }
 .slider-row input[type=range] { flex: 1; }
