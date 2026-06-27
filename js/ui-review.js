@@ -4,7 +4,7 @@ import { recentDates, cumulativeSum, todayISO } from "./logic.js";
 const WINDOW = 30;
 
 export async function renderReview(root) {
-  root.innerHTML = `<h1>回顧（近 ${WINDOW} 天）</h1><div id="review-body" class="muted">載入中…</div>`;
+  root.innerHTML = `<h1>回顧（近 ${WINDOW} 天）</h1><div id="review-body" class="loading"><span class="spinner"></span>載入中…</div>`;
   const body = root.querySelector("#review-body");
   try {
     const dates = recentDates(todayISO(), WINDOW);

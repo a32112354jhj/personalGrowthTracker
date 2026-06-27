@@ -15,7 +15,7 @@ export async function renderWeekly(root) {
       <span class="week-label">${weekLabel(weekStart)}${isThisWeek ? "（本週）" : ""}</span>
       <button class="secondary" id="wk-next" aria-label="下一週">›</button>
     </div>
-    <div id="weekly-body" class="muted">載入中…</div>`;
+    <div id="weekly-body" class="loading"><span class="spinner"></span>載入中…</div>`;
 
   root.querySelector("#wk-prev").addEventListener("click", () => { weekStart = addDays(weekStart, -7); renderWeekly(root); });
   root.querySelector("#wk-next").addEventListener("click", () => { weekStart = addDays(weekStart, 7); renderWeekly(root); });

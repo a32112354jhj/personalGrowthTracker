@@ -29,7 +29,7 @@ export async function renderCharts(root) {
         <input type="date" id="chart-to" />
       </div>
     </div>
-    <div id="chart-area" class="muted">載入中…</div>`;
+    <div id="chart-area" class="loading"><span class="spinner"></span>載入中…</div>`;
 
   try {
     const [habits, scores, metrics] = await Promise.all([
@@ -94,7 +94,7 @@ async function draw(root) {
   if (!def) { area.innerHTML = `<p class="muted">請選擇項目</p>`; return; }
 
   area.classList.remove("muted");
-  area.innerHTML = `<p class="muted">載入中…</p>`;
+  area.innerHTML = `<p class="loading"><span class="spinner"></span>載入中…</p>`;
 
   let rows;
   try {

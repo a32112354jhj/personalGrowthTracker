@@ -9,7 +9,7 @@ const GROUPS = [
 ];
 
 export async function renderSettings(root) {
-  root.innerHTML = `<h1>設定</h1><div id="settings-body" class="muted">載入中…</div>
+  root.innerHTML = `<h1>設定</h1><div id="settings-body" class="loading"><span class="spinner"></span>載入中…</div>
     <button id="logout-btn" class="secondary" style="margin-top:24px">登出</button>`;
 
   root.querySelector("#logout-btn").addEventListener("click", async () => {

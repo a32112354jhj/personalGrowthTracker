@@ -8,7 +8,7 @@ export async function renderToday(root) {
   currentDate = currentDate || todayISO();
   root.innerHTML = `<h1>今天</h1>
     <input type="date" id="today-date" value="${currentDate}" />
-    <div id="today-body" class="muted">載入中…</div>`;
+    <div id="today-body" class="loading"><span class="spinner"></span>載入中…</div>`;
 
   root.querySelector("#today-date").addEventListener("change", (e) => {
     currentDate = e.target.value;
