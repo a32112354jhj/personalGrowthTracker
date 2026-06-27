@@ -199,3 +199,23 @@ input[type=range] { accent-color: var(--accent); }
   }
   #today-body { padding-bottom: 66px; }
 }
+
+/* 週目標 */
+.week-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.week-nav button { padding: 8px 16px; }
+.week-label { font-family: "Orbitron", sans-serif; letter-spacing: 1px; color: var(--accent); text-shadow: 0 0 8px rgba(43, 212, 255, 0.4); }
+.goal { cursor: default; }
+.goal-todo { cursor: pointer; user-select: none; -webkit-user-select: none; }
+.goal-todo .check { pointer-events: none; }
+.goal-count { font-family: "Orbitron", sans-serif; color: var(--muted); }
+.goal-count.reached { color: var(--good); text-shadow: 0 0 8px rgba(57, 255, 158, 0.6); }
+.goal.filled { opacity: 0.55; }
+.add-goal input, .add-goal select { margin: 6px 0; }
+.reminder {
+  position: relative; z-index: 9; margin: 0 auto; max-width: 640px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 12px 16px; color: var(--good);
+  background: rgba(57, 255, 158, 0.08); border: 1px solid var(--good);
+  box-shadow: 0 0 12px rgba(57, 255, 158, 0.25);
+}
+@media (min-width: 768px) { .reminder { margin-top: 64px; } }
