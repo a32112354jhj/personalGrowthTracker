@@ -111,7 +111,7 @@ async function draw(root) {
       <div style="position:relative;height:280px"><canvas id="c-line"></canvas></div>`;
     chartInstances.push(new Chart(area.querySelector("#c-line"), {
       type: "line",
-      data: { labels, datasets: [{ label: def.name, data, borderColor: "#1496b0", backgroundColor: "rgba(20,150,176,.15)", spanGaps: true, tension: 0.25, fill: true }] },
+      data: { labels, datasets: [{ label: def.name, data, borderColor: "#2bd4ff", backgroundColor: "rgba(43,212,255,.18)", spanGaps: true, tension: 0.25, fill: true }] },
       options: axisOpts(false),
     }));
   } else {
@@ -136,13 +136,13 @@ async function draw(root) {
 
     chartInstances.push(new Chart(area.querySelector("#c-bar"), {
       type: "bar",
-      data: { labels, datasets: [{ label: "完成率 %", data: rateData, backgroundColor: "#1496b0" }] },
+      data: { labels, datasets: [{ label: "完成率 %", data: rateData, backgroundColor: "#2bd4ff" }] },
       options: pctAxisOpts(),
     }));
     chartInstances.push(new Chart(area.querySelector("#c-pie"), {
       type: "doughnut",
-      data: { labels: ["達成", "未達成"], datasets: [{ data: [doneDays, notDoneDays], backgroundColor: ["#1496b0", "#d3dde4"] }] },
-      options: { maintainAspectRatio: false, plugins: { legend: { labels: { color: "#1b2b36" } } } },
+      data: { labels: ["達成", "未達成"], datasets: [{ data: [doneDays, notDoneDays], backgroundColor: ["#2bd4ff", "#15323f"] }] },
+      options: { maintainAspectRatio: false, plugins: { legend: { labels: { color: "#dff4ff" } } } },
     }));
 
     const tip = area.querySelector("#hm-tip");
@@ -184,24 +184,24 @@ function heatmapHtml(weeks) {
 }
 
 function axisOpts(intY) {
-  const grid = "rgba(27,43,54,.08)";
+  const grid = "rgba(43,212,255,.12)";
   return {
     maintainAspectRatio: false,
     scales: {
-      x: { ticks: { color: "#5c7384", maxRotation: 0, autoSkip: true }, grid: { color: grid } },
-      y: { beginAtZero: intY, ticks: { color: "#5c7384", precision: intY ? 0 : undefined }, grid: { color: grid } },
+      x: { ticks: { color: "#7fb8d6", maxRotation: 0, autoSkip: true }, grid: { color: grid } },
+      y: { beginAtZero: intY, ticks: { color: "#7fb8d6", precision: intY ? 0 : undefined }, grid: { color: grid } },
     },
     plugins: { legend: { display: false } },
   };
 }
 
 function pctAxisOpts() {
-  const grid = "rgba(27,43,54,.08)";
+  const grid = "rgba(43,212,255,.12)";
   return {
     maintainAspectRatio: false,
     scales: {
-      x: { ticks: { color: "#5c7384", maxRotation: 0, autoSkip: true }, grid: { color: grid } },
-      y: { min: 0, max: 100, ticks: { color: "#5c7384", stepSize: 25, callback: (v) => v + "%" }, grid: { color: grid } },
+      x: { ticks: { color: "#7fb8d6", maxRotation: 0, autoSkip: true }, grid: { color: grid } },
+      y: { min: 0, max: 100, ticks: { color: "#7fb8d6", stepSize: 25, callback: (v) => v + "%" }, grid: { color: grid } },
     },
     plugins: { legend: { display: false } },
   };
