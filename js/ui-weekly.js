@@ -34,7 +34,7 @@ export async function renderWeekly(root) {
     const withProgress = goals.map((g) => ({ ...g, progress: progressOf(g, checks) }));
     const sum = weeklySummary(withProgress);
 
-    body.classList.remove("muted");
+    body.classList.remove("muted", "loading");
     body.innerHTML = `
       <h2>本週目標</h2>
       ${withProgress.map((g) => goalRow(g, habitName)).join("") || `<p class="muted">尚無目標，於下方新增</p>`}

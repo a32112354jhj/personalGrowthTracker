@@ -93,7 +93,7 @@ async function draw(root) {
   const def = defsCache.find((d) => d._type === type && d.id === id);
   if (!def) { area.innerHTML = `<p class="muted">請選擇項目</p>`; return; }
 
-  area.classList.remove("muted");
+  area.classList.remove("muted", "loading");
   area.innerHTML = `<p class="loading"><span class="spinner"></span>載入中…</p>`;
 
   let rows;

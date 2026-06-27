@@ -249,9 +249,10 @@ input[type=range] { accent-color: var(--accent); }
 @keyframes drift3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,-55px) scale(1.15); } }
 
 /* 載入轉圈 */
-.loading { display: flex; align-items: center; gap: 10px; color: var(--muted); padding: 10px 0; }
+.loading { color: var(--muted); padding: 10px 0; }
 .spinner {
-  width: 18px; height: 18px; flex: 0 0 18px; border-radius: 50%;
+  display: inline-block; vertical-align: -4px; margin-right: 8px;
+  width: 18px; height: 18px; border-radius: 50%;
   border: 2px solid rgba(43, 212, 255, 0.22); border-top-color: var(--accent);
   box-shadow: 0 0 8px rgba(43, 212, 255, 0.35);
   animation: spin 0.7s linear infinite;

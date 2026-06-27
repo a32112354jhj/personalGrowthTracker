@@ -20,7 +20,7 @@ export async function renderReview(root) {
       getRange("metric_values", from, to),
     ]);
 
-    body.classList.remove("muted");
+    body.classList.remove("muted", "loading");
     body.innerHTML =
       habitSection(habits, checks) +
       scoreSection(scoreItems, scores) +

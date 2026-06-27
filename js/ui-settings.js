@@ -19,7 +19,7 @@ export async function renderSettings(root) {
   const body = root.querySelector("#settings-body");
   try {
     const lists = await Promise.all(GROUPS.map((g) => listDefinitions(g.table)));
-    body.classList.remove("muted");
+    body.classList.remove("muted", "loading");
     body.innerHTML = GROUPS.map((g, i) => groupBlock(g, lists[i])).join("");
     wireGroups(root);
   } catch (err) {

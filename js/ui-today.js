@@ -28,7 +28,7 @@ export async function renderToday(root) {
     const scoreMap = Object.fromEntries(day.scores.map((s) => [s.score_item_id, s.value]));
     const metricMap = Object.fromEntries(day.metrics.map((m) => [m.metric_item_id, m.value]));
 
-    body.classList.remove("muted");
+    body.classList.remove("muted", "loading");
     body.innerHTML = `
       ${section("習慣", habits.map((h) => habitRow(h, checkMap[h.id] || false)).join("") || empty())}
       ${section("評分（1–10）", scoreItems.map((s) => scoreRow(s, scoreMap[s.id] ?? 5)).join("") || empty())}
