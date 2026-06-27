@@ -147,3 +147,29 @@ test("countDaysPerBucket 計算每桶在區間內的日曆天數", () => {
   assert.deepEqual(countDaysPerBucket("2026-05-30", "2026-06-02", "month"), { "2026-05": 2, "2026-06": 2 });
   assert.deepEqual(countDaysPerBucket("2026-06-15", "2026-06-17", "week"), { "2026-06-15": 3 });
 });
+
+import { addDays, weekRange, weekLabel, weeklySummary } from "../js/logic.js";
+
+test("addDays 加減天數（跨月）", () => {
+  assert.equal(addDays("2026-06-20", 3), "2026-06-23");
+  assert.equal(addDays("2026-06-30", 1), "2026-07-01");
+  assert.equal(addDays("2026-06-01", -1), "2026-05-31");
+});
+
+test("weekRange 回傳週一到週日", () => {
+  assert.deepEqual(weekRange("2026-06-15"), { from: "2026-06-15", to: "2026-06-21" });
+});
+
+test("weekLabel 顯示 M/D–M/D", () => {
+  assert.equal(weekLabel("2026-06-15"), "6/15–6/21");
+});
+
+test("weeklySummary 統計 todo 完成數與 count 達標數", () => {
+  const goals = [
+    { type: "todo", done: true, target: 1, progress: 0 },
+    { type: "todo", done: false, target: 1, progress: 0 },
+    { type: "count", done: false, target: 4, progress: 4 },
+    { type: "count", done: false, target: 3, progress: 1 },
+  ];
+  assert.deepEqual(weeklySummary(goals), { todoDone: 1, todoTotal: 2, countDone: 1, countTotal: 2 });
+});

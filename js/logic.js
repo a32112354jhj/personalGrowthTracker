@@ -220,3 +220,38 @@ export function countDaysPerBucket(fromISO, toISO, unit) {
   }
   return out;
 }
+
+// ===== 每週目標用 =====
+
+// 日期加減天數，回傳 YYYY-MM-DD。
+export function addDays(dateISO, n) {
+  const [y, m, d] = dateISO.split("-").map(Number);
+  return isoFromDate(new Date(y, m - 1, d + n));
+}
+
+// 某週（以週一 ISO 表示）的起迄（週一..週日）。
+export function weekRange(weekStartISO) {
+  return { from: weekStartISO, to: addDays(weekStartISO, 6) };
+}
+
+// 週標籤 "M/D–M/D"（不補零）。
+export function weekLabel(weekStartISO) {
+  const end = addDays(weekStartISO, 6);
+  const md = (iso) => `${Number(iso.slice(5, 7))}/${Number(iso.slice(8, 10))}`;
+  return `${md(weekStartISO)}–${md(end)}`;
+}
+
+// 目標達成摘要。goals 需已附帶 progress（count 的當前次數）。
+export function weeklySummary(goals) {
+  let todoDone = 0, todoTotal = 0, countDone = 0, countTotal = 0;
+  for (const g of goals) {
+    if (g.type === "count") {
+      countTotal++;
+      if (g.progress >= g.target) countDone++;
+    } else {
+      todoTotal++;
+      if (g.done) todoDone++;
+    }
+  }
+  return { todoDone, todoTotal, countDone, countTotal };
+}
