@@ -244,3 +244,31 @@ export async function countCompletedWeeklyGoals() {
   }
   return n;
 }
+
+// ===== 自訂能力項目（E→S 等級審核表）=====
+
+export async function listAbilities() {
+  const { data, error } = await sb
+    .from("ability_items")
+    .select("*")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
+export async function addAbility(name) {
+  const user_id = await uid();
+  const { error } = await sb.from("ability_items").insert({ user_id, name });
+  if (error) throw error;
+}
+
+export async function updateAbility(id, fields) {
+  const { error } = await sb.from("ability_items").update(fields).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteAbility(id) {
+  const { error } = await sb.from("ability_items").delete().eq("id", id);
+  if (error) throw error;
+}
