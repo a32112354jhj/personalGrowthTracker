@@ -371,3 +371,13 @@ button.link:hover { color: var(--accent); }
 /* 6 個分頁：縮小字距讓標籤一行放得下 */
 #tabbar button { font-size: 0.84rem; letter-spacing: 0; }
 @media (min-width: 768px) { #tabbar button { font-size: 0.95rem; letter-spacing: 1px; } }
+
+/* 開啟網頁的啟動動畫（全黑 + 置中 GIF） */
+#intro {
+  position: fixed; inset: 0; z-index: 100;
+  background: #000; display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.6s ease;
+}
+#intro img { width: min(70vw, 320px); height: auto; }
+#intro.hide { opacity: 0; }
+#intro.gone { display: none; }
