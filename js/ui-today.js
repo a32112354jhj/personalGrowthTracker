@@ -1,6 +1,7 @@
 import { listDefinitions, getDay, saveDay } from "./db.js";
 import { todayISO, clampScore, parseMetricValue } from "./logic.js";
 import { showToast } from "./app.js";
+import { renderStatus, gainXp } from "./ui-status.js";
 
 let currentDate = todayISO();
 
@@ -30,6 +31,7 @@ export async function renderToday(root) {
 
     body.classList.remove("muted", "loading");
     body.innerHTML = `
+      <div id="status-slot"></div>
       ${section("習慣", habits.map((h) => habitRow(h, checkMap[h.id] || false)).join("") || empty())}
       ${section("評分（1–10）", scoreItems.map((s) => scoreRow(s, scoreMap[s.id] ?? 5)).join("") || empty())}
       ${section("數值", metricItems.map((m) => metricRow(m, metricMap[m.id], m.id in metricMap)).join("") || empty())}
@@ -45,6 +47,7 @@ export async function renderToday(root) {
         const on = chk.classList.toggle("done");
         row.classList.toggle("done", on);
         row.classList.toggle("filled", on);
+        gainXp(on ? 10 : -10, chk);
       })
     );
     body.querySelectorAll("input[data-metric]").forEach((inp) =>
@@ -60,6 +63,8 @@ export async function renderToday(root) {
     body.querySelector("#save-btn").addEventListener("click", () =>
       save(root, habits, scoreItems, metricItems)
     );
+
+    renderStatus(body.querySelector("#status-slot"));
   } catch (err) {
     body.innerHTML = `<p class="error">載入失敗：${escapeHtml(err.message || "")}</p>`;
   }

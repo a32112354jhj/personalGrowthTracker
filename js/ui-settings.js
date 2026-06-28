@@ -1,4 +1,6 @@
 import { listDefinitions, addDefinition, updateDefinition, archiveDefinition } from "./db.js";
+import { getPlayer, setRankCriteria, listPromotions } from "./db.js";
+import { RANKS } from "./logic.js";
 import { signOut } from "./auth.js";
 import { showToast } from "./app.js";
 
@@ -19,9 +21,11 @@ export async function renderSettings(root) {
   const body = root.querySelector("#settings-body");
   try {
     const lists = await Promise.all(GROUPS.map((g) => listDefinitions(g.table)));
+    const [player, promos] = await Promise.all([getPlayer(), listPromotions()]);
     body.classList.remove("muted", "loading");
-    body.innerHTML = GROUPS.map((g, i) => groupBlock(g, lists[i])).join("");
+    body.innerHTML = GROUPS.map((g, i) => groupBlock(g, lists[i])).join("") + rankBlock(player, promos);
     wireGroups(root);
+    wireRank(root);
   } catch (err) {
     body.innerHTML = `<p class="error">載入失敗：${escapeHtml(err.message || "")}</p>`;
   }
@@ -105,6 +109,36 @@ function wireGroups(root) {
       }
     })
   );
+}
+
+function rankBlock(player, promos) {
+  const crit = player.criteria || {};
+  const editors = RANKS.slice(1).map((r) =>
+    `<div class="card">
+      <div class="muted">晉到 ${r} 階的條件（每行一項）</div>
+      <textarea data-crit-rank="${r}" rows="3" placeholder="例如：連續打卡 14 天；完成 2 個週目標…">${escapeHtml(crit[r] || "")}</textarea>
+    </div>`
+  ).join("");
+  const log = promos.length
+    ? promos.map((p) => `<div class="card row"><span>${escapeHtml(p.rank)} 階</span><span class="muted">${escapeHtml((p.approved_at || "").slice(0, 10))}　${escapeHtml(p.note || "")}</span></div>`).join("")
+    : `<p class="muted">尚無晉階紀錄</p>`;
+  return `<h2>階級設定</h2>${editors}
+    <button id="save-crit">儲存晉階條件</button>
+    <h2>晉階紀錄</h2>${log}`;
+}
+
+function wireRank(root) {
+  const btn = root.querySelector("#save-crit");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    const criteria = {};
+    root.querySelectorAll("[data-crit-rank]").forEach((t) => {
+      const v = t.value.trim();
+      if (v) criteria[t.dataset.critRank] = v;
+    });
+    try { await setRankCriteria(criteria); showToast("已儲存"); }
+    catch { showToast("儲存失敗"); }
+  });
 }
 
 function escapeHtml(s) {

@@ -4,6 +4,7 @@ import {
 } from "./db.js";
 import { todayISO, mondayOf, addDays, weekRange, weekLabel, weeklySummary } from "./logic.js";
 import { showToast } from "./app.js";
+import { gainXp } from "./ui-status.js";
 
 let weekStart = mondayOf(todayISO());
 
@@ -138,8 +139,11 @@ function wire(root, body) {
       if (e.target.closest(".wk-del")) return;
       const id = rowEl.dataset.id;
       const done = !rowEl.classList.contains("done");
-      try { await updateWeeklyGoal(id, { done }); renderWeekly(root); }
-      catch { showToast("更新失敗"); }
+      try {
+        await updateWeeklyGoal(id, { done });
+        if (done) gainXp(50, rowEl.querySelector(".check"));
+        renderWeekly(root);
+      } catch { showToast("更新失敗"); }
     })
   );
 
