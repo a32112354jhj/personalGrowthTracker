@@ -299,3 +299,10 @@ export function nextRank(rank) {
 export function totalXp({ habitDones, weeklyGoalsDone }) {
   return habitDones * 10 + weeklyGoalsDone * 50;
 }
+
+// 上一階；E 之前為 null。
+export function prevRank(rank) {
+  const i = RANKS.indexOf(rank);
+  if (i <= 0) return null;
+  return RANKS[i - 1];
+}

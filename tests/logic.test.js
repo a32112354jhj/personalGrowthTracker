@@ -213,3 +213,11 @@ test("totalXp 習慣×10 + 週目標×50", () => {
   assert.equal(totalXp({ habitDones: 12, weeklyGoalsDone: 3 }), 12 * 10 + 3 * 50);
   assert.equal(totalXp({ habitDones: 0, weeklyGoalsDone: 0 }), 0);
 });
+
+import { prevRank } from "../js/logic.js";
+
+test("prevRank 回傳上一階，E 之前為 null", () => {
+  assert.equal(prevRank("D"), "E");
+  assert.equal(prevRank("S"), "A");
+  assert.equal(prevRank("E"), null);
+});

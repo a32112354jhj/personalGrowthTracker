@@ -3,12 +3,13 @@ import { renderToday } from "./ui-today.js";
 import { renderWeekly } from "./ui-weekly.js";
 import { renderReview } from "./ui-review.js";
 import { renderCharts } from "./ui-charts.js";
+import { renderMyData } from "./ui-mydata.js";
 import { renderSettings } from "./ui-settings.js";
 import { listWeeklyGoals, getWeeklyReview } from "./db.js";
 import { todayISO, mondayOf, addDays } from "./logic.js";
 
 const el = (id) => document.getElementById(id);
-const TABS = ["today", "weekly", "review", "charts", "settings"];
+const TABS = ["today", "weekly", "review", "charts", "mydata", "settings"];
 
 export function showToast(msg) {
   const t = el("toast");
@@ -22,6 +23,7 @@ const renderers = {
   weekly: () => renderWeekly(el("tab-weekly")),
   review: () => renderReview(el("tab-review")),
   charts: () => renderCharts(el("tab-charts")),
+  mydata: () => renderMyData(el("tab-mydata")),
   settings: () => renderSettings(el("tab-settings")),
 };
 

@@ -351,3 +351,23 @@ button.link:hover { color: var(--accent); }
   .promote-btn, .levelup.show, .xp-float { animation: none; }
   .xpbar > span { transition: none; }
 }
+
+/* 數據頁：Lv 徽章 / 能力審核表 / 6 分頁 */
+.lv-badge {
+  width: 56px; height: 56px; flex: 0 0 56px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-family: "Orbitron", sans-serif; font-weight: 700; font-size: 12px; line-height: 1;
+  color: var(--accent); border: 2px solid var(--accent);
+  box-shadow: 0 0 14px rgba(43, 212, 255, 0.55), inset 0 0 12px rgba(43, 212, 255, 0.12);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.lv-badge b { font-size: 22px; color: #eafaff; text-shadow: 0 0 10px rgba(43, 212, 255, 0.8); }
+.status-title { font-family: "Orbitron", sans-serif; letter-spacing: 3px; color: var(--accent); font-size: 0.95rem; text-shadow: 0 0 8px rgba(43, 212, 255, 0.6); }
+.ability-row { display: flex; align-items: center; gap: 12px; }
+.ability-row .rank-badge { width: 42px; height: 42px; flex: 0 0 42px; font-size: 19px; }
+.ability-name { flex: 1; min-width: 0; margin: 0; }
+.ab-up, .ab-down { padding: 8px 12px; }
+
+/* 6 個分頁：縮小字距讓標籤一行放得下 */
+#tabbar button { font-size: 0.84rem; letter-spacing: 0; }
+@media (min-width: 768px) { #tabbar button { font-size: 0.95rem; letter-spacing: 1px; } }
