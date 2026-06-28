@@ -173,3 +173,43 @@ test("weeklySummary 統計 todo 完成數與 count 達標數", () => {
   ];
   assert.deepEqual(weeklySummary(goals), { todoDone: 1, todoTotal: 2, countDone: 1, countTotal: 2 });
 });
+
+import { RANKS, xpToNext, levelFromXp, rankForLevel, nextRank, totalXp } from "../js/logic.js";
+
+test("RANKS 由弱到強", () => {
+  assert.deepEqual(RANKS, ["E", "D", "C", "B", "A", "S"]);
+});
+
+test("xpToNext 遞增（每級 +50）", () => {
+  assert.equal(xpToNext(1), 100);
+  assert.equal(xpToNext(2), 150);
+  assert.equal(xpToNext(3), 200);
+});
+
+test("levelFromXp 換算等級與進度", () => {
+  assert.deepEqual(levelFromXp(0), { level: 1, into: 0, need: 100 });
+  assert.deepEqual(levelFromXp(99), { level: 1, into: 99, need: 100 });
+  assert.deepEqual(levelFromXp(100), { level: 2, into: 0, need: 150 });
+  assert.deepEqual(levelFromXp(260), { level: 3, into: 10, need: 200 });
+});
+
+test("rankForLevel 依門檻 E=1,D=5,C=12,B=22,A=35,S=50", () => {
+  assert.equal(rankForLevel(1), "E");
+  assert.equal(rankForLevel(4), "E");
+  assert.equal(rankForLevel(5), "D");
+  assert.equal(rankForLevel(12), "C");
+  assert.equal(rankForLevel(49), "A");
+  assert.equal(rankForLevel(50), "S");
+  assert.equal(rankForLevel(999), "S");
+});
+
+test("nextRank 回傳下一階，S 之後為 null", () => {
+  assert.equal(nextRank("E"), "D");
+  assert.equal(nextRank("A"), "S");
+  assert.equal(nextRank("S"), null);
+});
+
+test("totalXp 習慣×10 + 週目標×50", () => {
+  assert.equal(totalXp({ habitDones: 12, weeklyGoalsDone: 3 }), 12 * 10 + 3 * 50);
+  assert.equal(totalXp({ habitDones: 0, weeklyGoalsDone: 0 }), 0);
+});

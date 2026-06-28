@@ -255,3 +255,47 @@ export function weeklySummary(goals) {
   }
   return { todoDone, todoTotal, countDone, countTotal };
 }
+
+// ===== 遊戲化等級 / 階級 =====
+
+export const RANKS = ["E", "D", "C", "B", "A", "S"];
+
+// 各階所需「最低等級」門檻，對應 RANKS。
+const RANK_LEVELS = [1, 5, 12, 22, 35, 50];
+
+// 升一級（從 level 到 level+1）所需 XP。
+export function xpToNext(level) {
+  return 100 + (level - 1) * 50;
+}
+
+// 由總 XP 換算 { level, into, need }。
+export function levelFromXp(totalXpValue) {
+  let level = 1;
+  let acc = 0;
+  while (acc + xpToNext(level) <= totalXpValue) {
+    acc += xpToNext(level);
+    level++;
+  }
+  return { level, into: totalXpValue - acc, need: xpToNext(level) };
+}
+
+// 該等級可達到的最高階級字母。
+export function rankForLevel(level) {
+  let r = RANKS[0];
+  for (let i = 0; i < RANKS.length; i++) {
+    if (level >= RANK_LEVELS[i]) r = RANKS[i];
+  }
+  return r;
+}
+
+// 下一階；S 之後為 null。
+export function nextRank(rank) {
+  const i = RANKS.indexOf(rank);
+  if (i < 0 || i >= RANKS.length - 1) return null;
+  return RANKS[i + 1];
+}
+
+// 由完成數換算總 XP。
+export function totalXp({ habitDones, weeklyGoalsDone }) {
+  return habitDones * 10 + weeklyGoalsDone * 50;
+}
