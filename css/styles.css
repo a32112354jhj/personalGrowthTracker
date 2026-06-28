@@ -22,6 +22,7 @@ body {
   color: var(--text);
   font-family: "Rajdhani", -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
   font-weight: 500;
+  padding-top: env(safe-area-inset-top);
   padding-bottom: 72px;
   -webkit-tap-highlight-color: transparent;
 }
